@@ -1,3 +1,6 @@
 Created in clone repo, tracking branch "bugikorjaus"
 
 Updated in clone repo, on branch main
+
+Modifying in the original local clone, on branch main
+

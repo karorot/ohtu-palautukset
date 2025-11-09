@@ -2,5 +2,9 @@
 
 Helsingin Yliopiston Ohjelmistotuotanto-kurssin laskareiden palautusrepositorio.
 
-Tehtävät 2-13 löytyvät toisesta repositoriosta (ohtuvarasto): https://github.com/karorot/ohtuvarasto 
+## Sisältö:
+* Viikko 1: tehtävät 14-17
+* Viikko 2: tehtävät 1-5, 8(osittain) ja 9-13
+
+Loput tehtävät löytyvät toisesta repositoriosta (ohtuvarasto): https://github.com/karorot/ohtuvarasto 
 

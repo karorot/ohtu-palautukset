@@ -1,4 +1,4 @@
-class Player:
+class Player: # pylint: disable=too-few-public-methods
     def __init__(self, data):
         self.name = data['name']
         self.nationality = data['nationality']

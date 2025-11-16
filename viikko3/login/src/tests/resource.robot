@@ -16,6 +16,7 @@ Open And Configure Browser
     IF  $BROWSER == 'chrome'
         ${options}  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys
         Call Method  ${options}  add_argument  --incognito
+        Call Method  ${options}  add_argument  -disable-search-engine-choice-screen
     ELSE IF  $BROWSER == 'firefox'
         ${options}  Evaluate  sys.modules['selenium.webdriver'].FirefoxOptions()  sys
         Call Method  ${options}  add_argument  --private-window
@@ -37,8 +38,14 @@ Register Page Should Be Open
 Main Page Should Be Open
     Title Should Be  Ohtu Application main page
 
-Go To Login Page
-    Go To  ${LOGIN_URL}
+Welcome Page Should Be Open
+    Title Should Be  Welcome to Ohtu Application!
 
 Go To Starting Page
     Go To  ${HOME_URL}
+
+Go To Login Page
+    Go To  ${LOGIN_URL}
+
+Go To Register Page
+    Go To  ${REGISTER_URL}

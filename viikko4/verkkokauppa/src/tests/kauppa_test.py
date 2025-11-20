@@ -110,3 +110,12 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.lisaa_koriin(2)
         self.kauppa.tilimaksu("mikko", "11223")
         self.pankki_mock.tilisiirto.assert_called_with("mikko", 4, "11223", ANY, 8)
+
+    def test_tuotteen_poiston_jalkeen_tilisiirtoa_kutsutaan_oikeilla_parametreilla(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.poista_korista(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", ANY, 3)

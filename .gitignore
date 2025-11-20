@@ -8,3 +8,4 @@ htmlcov/
 output.xml
 log.html
 report.html
+*.png

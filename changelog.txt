@@ -5,3 +5,5 @@ Updated in clone repo, on branch main
 Modifying in the original local clone, on branch main
 
 Modifying once more in clone repo, on branch main
+
+Making a modification after tagging.

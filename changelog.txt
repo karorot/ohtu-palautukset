@@ -9,3 +9,5 @@ Modifying once more in clone repo, on branch main
 Making a modification after tagging.
 
 Making modifications after removing a file.
+
+Making a modification from the new "haara" branch

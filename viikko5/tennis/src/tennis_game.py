@@ -8,12 +8,21 @@ class Score(IntEnum):
     ADVANTAGE = 4
 
 class TennisGame:
+    WINNING_CALL = "Win for "
+    ADVANTAGE_CALL = "Advantage "
+
     def __init__(self, player1_name, player2_name):
         self.player1 = player1_name
         self.player2 = player2_name
         self.scores = {
             player1_name: Score.LOVE,
             player2_name: Score.LOVE
+        }
+        self.score_names = {
+            Score.LOVE: "Love",
+            Score.FIFTEEN: "Fifteen",
+            Score.THIRTY: "Thirty",
+            Score.FORTY: "Forty"
         }
 
     def won_point(self, player_name):
@@ -22,7 +31,7 @@ class TennisGame:
 
     def get_score(self):
         if self.scores[self.player1] == self.scores[self.player2]:
-            return self.call_even_score()
+            return self.call_even_score(self.scores[self.player1])
 
         if self.scores[self.player1] >= Score.ADVANTAGE or \
             self.scores[self.player2] >= Score.ADVANTAGE:
@@ -30,25 +39,21 @@ class TennisGame:
 
         return self.call_score()
 
-    def call_even_score(self):
-        if self.scores[self.player1] == Score.LOVE:
-            return "Love-All"
-        if self.scores[self.player1] == Score.FIFTEEN:
-            return "Fifteen-All"
-        if self.scores[self.player1] == Score.THIRTY:
-            return "Thirty-All"
+    def call_even_score(self, score):
+        if score < Score.FORTY:
+            return self.score_names[score] + "-All"
         return "Deuce"
 
     def call_winning_score(self):
         minus_result = self.scores[self.player1] - self.scores[self.player2]
 
         if minus_result == 1:
-            return "Advantage " + self.player1
+            return self.ADVANTAGE_CALL + self.player1
         if minus_result == -1:
-            return "Advantage " + self.player2
+            return self.ADVANTAGE_CALL + self.player2
         if minus_result >= 2:
-            return "Win for " + self.player1
-        return "Win for " + self.player2
+            return self.WINNING_CALL + self.player1
+        return self.WINNING_CALL + self.player2
 
     def call_score(self):
         temp_score = 0
@@ -61,13 +66,6 @@ class TennisGame:
                 score = score + "-"
                 temp_score = self.scores[self.player2]
 
-            if temp_score == Score.LOVE:
-                score = score + "Love"
-            elif temp_score == Score.FIFTEEN:
-                score = score + "Fifteen"
-            elif temp_score == Score.THIRTY:
-                score = score + "Thirty"
-            elif temp_score == Score.FORTY:
-                score = score + "Forty"
+            score = score + self.score_names[temp_score]
 
         return score

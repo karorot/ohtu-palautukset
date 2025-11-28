@@ -11,3 +11,5 @@ Making a modification after tagging.
 Making modifications after removing a file.
 
 Making a modification from the new "haara" branch
+
+Another modification from 'haara' branch.

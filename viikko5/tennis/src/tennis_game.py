@@ -33,8 +33,8 @@ class TennisGame:
         if self.scores[self.player1] == self.scores[self.player2]:
             return self.call_even_score(self.scores[self.player1])
 
-        if self.scores[self.player1] >= Score.ADVANTAGE or \
-            self.scores[self.player2] >= Score.ADVANTAGE:
+        if (self.scores[self.player1] >= Score.ADVANTAGE or
+            self.scores[self.player2] >= Score.ADVANTAGE):
             return self.call_winning_score()
 
         return self.call_score()
@@ -45,13 +45,13 @@ class TennisGame:
         return "Deuce"
 
     def call_winning_score(self):
-        minus_result = self.scores[self.player1] - self.scores[self.player2]
+        score_difference = self.scores[self.player1] - self.scores[self.player2]
 
-        if minus_result == 1:
+        if score_difference == 1:
             return self.ADVANTAGE_CALL + self.player1
-        if minus_result == -1:
+        if score_difference == -1:
             return self.ADVANTAGE_CALL + self.player2
-        if minus_result >= 2:
+        if score_difference >= 2:
             return self.WINNING_CALL + self.player1
         return self.WINNING_CALL + self.player2
 

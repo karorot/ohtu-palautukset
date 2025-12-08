@@ -6,8 +6,8 @@ class And:
         for matcher in self._matchers:
             if not matcher.test(player):
                 return False
-
         return True
+
 
 class Not:
     def __init__(self, *matchers):
@@ -18,6 +18,18 @@ class Not:
             if matcher.test(player):
                 return False
         return True
+
+
+class Or:
+    def __init__(self, *matchers):
+        self._matchers = matchers
+
+    def test(self, player):
+        for matcher in self._matchers:
+            if matcher.test(player):
+                return True
+        return False
+
 
 class PlaysIn:
     def __init__(self, team):

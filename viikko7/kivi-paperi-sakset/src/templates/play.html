@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block content %}
+  <header class="header">
+    <h2 class="title">{{ mode_label }}</h2>
+    <div class="actions">
+      <a class="btn secondary" href="{{ url_for('reset') }}">Nollaa pisteet</a>
+      <a class="btn ghost" href="{{ url_for('home') }}">Uusi peli</a>
+    </div>
+  </header>
+
+  {% if overall_stats and overall_stats[mode] %}
+  <section class="mode-stats">
+    <div class="mode-stat-card">
+      <span class="mode-stat-label">Voittoja:</span>
+      <span class="mode-stat-value win">{{ overall_stats[mode].wins }}</span>
+    </div>
+    <div class="mode-stat-card">
+      <span class="mode-stat-label">Tappioita:</span>
+      <span class="mode-stat-value loss">{{ overall_stats[mode].losses }}</span>
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="score">
+    <div class="score-card">
+      <div class="label">Pelaaja 1</div>
+      <div class="value">{{ score_eka }}</div>
+    </div>
+    <div class="score-card">
+      <div class="label">Tasapelit</div>
+      <div class="value">{{ score_tie }}</div>
+    </div>
+    <div class="score-card">
+      <div class="label">{{ 'Pelaaja 2' if mode == 'a' else 'Tekoäly' }}</div>
+      <div class="value">{{ score_toka }}</div>
+    </div>
+  </section>
+
+  {% if last and last.message %}
+  <section class="last">
+    <div class="last-card">
+      <div class="moves">
+        <span class="chip">Sinä: {{ last.eka }}</span>
+        <span class="chip">{{ 'P2' if mode == 'a' else 'AI' }}: {{ last.toka }}</span>
+      </div>
+      <div class="result {{ 'win' if last.message == 'Voitit!' else ('draw' if last.message == 'Tasapeli' else 'lose') }}">
+        {{ last.message }}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if game_over %}
+    <!-- Victory Screen Overlay -->
+    <div class="victory-overlay">
+      <div class="victory-card">
+        <div class="trophy">🏆</div>
+        <h2 class="victory-title">{{ game_over.message }}</h2>
+        <div class="final-score">Lopputulos: {{ game_over.final_score }}</div>
+        <div class="victory-actions">
+          <a class="btn primary large" href="{{ url_for('reset') }}">Pelaa uudestaan</a>
+          <a class="btn secondary large" href="{{ url_for('home') }}">Vaihda pelimuotoa</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <!-- Game Controls (only show if game not over) -->
+    {% if mode == 'a' %}
+    <section class="play-grid">
+      <div class="play-card" id="pvp-container">
+        <h3>Pelaaja 1</h3>
+        <div class="buttons" id="p1-buttons">
+          <button class="btn play rock" data-move="k">🪨 Kivi</button>
+          <button class="btn play paper" data-move="p">📄 Paperi</button>
+          <button class="btn play scissors" data-move="s">✂️ Sakset</button>
+        </div>
+        <h3 class="mt">Pelaaja 2</h3>
+        <div class="buttons" id="p2-buttons" style="opacity: 0.4; pointer-events: none;">
+          <button class="btn play rock" data-move="k">🪨 Kivi</button>
+          <button class="btn play paper" data-move="p">📄 Paperi</button>
+          <button class="btn play scissors" data-move="s">✂️ Sakset</button>
+        </div>
+        <form id="pvp-form" action="{{ url_for('move') }}" method="post" style="display:none;">
+          <input type="hidden" name="eka" id="eka-input">
+          <input type="hidden" name="toka" id="toka-input">
+        </form>
+      </div>
+    </section>
+  {% else %}
+    <section class="play-grid">
+      <form action="{{ url_for('move') }}" method="post" class="play-card">
+        <h3>Valitse siirto</h3>
+        <div class="buttons">
+          <button class="btn play rock" name="eka" value="k">🪨 Kivi</button>
+          <button class="btn play paper" name="eka" value="p">📄 Paperi</button>
+          <button class="btn play scissors" name="eka" value="s">✂️ Sakset</button>
+        </div>
+      </form>
+    </section>
+  {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (function(){
+      const last = {{ (last or {})|tojson }};
+      const gameOver = {{ (game_over or {})|tojson }};
+      
+      if (gameOver && gameOver.message) {
+        // Game over - big celebration!
+        triggerMassiveConfetti();
+        triggerSound('victory');
+      } else if (last && last.message) {
+        if (last.message === 'Voitit!') {
+          triggerConfetti();
+          triggerSound('win');
+        } else if (last.message === 'Tasapeli') {
+          triggerSound('draw');
+        } else if (last.message === 'Hävisit') {
+          triggerSound('lose');
+        }
+        // Animate result text
+        const el = document.querySelector('.result');
+        if (el) {
+          el.classList.add('pop');
+          setTimeout(()=> el.classList.remove('pop'), 600);
+        }
+      }
+    })();
+  </script>
+{% endblock %}
